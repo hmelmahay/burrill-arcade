@@ -267,6 +267,36 @@
       </div>
     </section>
 
+    <section class="card">
+      <div class="icon">🐺</div>
+      <h2>Party Pack</h2>
+      <p class="desc">
+        Nine games in one room: One Night Werewolf, Spyfall, Coup, Codenames, Avalon,
+        Fishbowl, Liar's Dice, Wits &amp; Wagers, and QE. Host a room, share the 4-letter
+        code, and switch games in the lobby without anyone rejoining. 2–12 players.
+      </p>
+      <div class="meta"><span class="dot" id="pp-dot"></span><span id="pp-status">Checking server…</span></div>
+      <div class="buttons">
+        <a class="btn host" href="https://party-pack.onrender.com">Host</a>
+        <a class="btn join" href="https://party-pack.onrender.com">Join with code</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="icon">🌫️</div>
+      <h2>Blitzkrieg Chess</h2>
+      <p class="desc">
+        Chess in the fog — you see only your own pieces, and a referee announces what
+        little you're allowed to know. Play the AI, or share a 5-letter code for an
+        online match with Fischer time controls. 1–2 players.
+      </p>
+      <div class="meta"><span class="dot ready"></span><span>Ready to play</span></div>
+      <div class="buttons">
+        <a class="btn host" href="https://blitz-chess.up.railway.app">Play / Host</a>
+        <a class="btn join" href="https://blitz-chess.up.railway.app">Join with code</a>
+      </div>
+    </section>
+
     <section class="card soon">
       <div class="icon">🎲</div>
       <span class="badge">Coming soon</span>
@@ -278,15 +308,15 @@
   <footer>The Burrill Arcade · house-party games, phones as controllers</footer>
 
   <script>
-    // Party Bluff sleeps on Render's free tier. Ping it as soon as anyone opens
-    // the arcade so it's already waking up by the time they click Host/Join.
-    (function () {
-      var dot = document.getElementById("pb-dot");
-      var status = document.getElementById("pb-status");
+    // Render free-tier games sleep when idle. Ping them as soon as anyone opens
+    // the arcade so they're already waking up by the time someone clicks Host/Join.
+    function warmUp(dotId, statusId, url) {
+      var dot = document.getElementById(dotId);
+      var status = document.getElementById(statusId);
       dot.className = "dot waking";
       status.textContent = "Warming up the server…";
       var started = Date.now();
-      fetch("https://party-bluff.onrender.com", { mode: "no-cors", cache: "no-store" })
+      fetch(url, { mode: "no-cors", cache: "no-store" })
         .then(function () {
           dot.className = "dot ready";
           status.textContent = Date.now() - started < 3000 ? "Ready to play" : "Awake and ready";
@@ -295,7 +325,9 @@
           dot.className = "dot waking";
           status.textContent = "Server waking up — first load may take ~1 min";
         });
-    })();
+    }
+    warmUp("pb-dot", "pb-status", "https://party-bluff.onrender.com");
+    warmUp("pp-dot", "pp-status", "https://party-pack.onrender.com");
   </script>
 </body>
 </html>
